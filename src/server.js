@@ -1,24 +1,27 @@
 import express from "express"
 import bodyParser from "body-parser"
+import {MongoClient} from 'mongodb'
 
-const informacoesArtigo = {
-"aprenda-react" : {
-    curtidas: 0,
-    comentarios: [],
-},
-"aprenda-node" : {
-    curtidas: 0,
-    comentarios: [],
-},
-"my-thoughts-on-resumes" : {
-    curtidas: 0,
-    comentarios: [],
-}
-}
 
 const app = express()
 
 app.use(bodyParser.json())
+
+app.get('/api/artigos/:nome', async (req, res) => {
+    try{
+        const nomeArtigo = req.params.nome;
+    const client = await MongoClient.connect('mongodb://localhost:27017', {useNewUrlParser: true})
+    const db = client.db('meu-blog')
+    const informacoesArtigo = await db.collection('artigos').findOne({nome : nomeArtigo})
+    res.status(200).json(informacoesArtigo)
+    //fecha conexao do banco de dados
+    client.close()
+    }
+    catch (error) {
+        res.status(500).json( {message: 'erro na conexao ao banco de dados: ', error})
+    }
+    
+})
 
 app.post('/api/artigos/:nome/curtida', (req, res) => {
     const nomeArtigo = req.params.nome;

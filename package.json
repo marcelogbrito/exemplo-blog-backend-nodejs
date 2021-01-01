@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/marcelogbrito/exemplo-blog-backend-nodejs#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
